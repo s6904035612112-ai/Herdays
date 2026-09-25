@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HerDays - ระบบติดตามรอบประจำเดือนและสุขภาพผู้หญิง</title>
+    
+    <!-- Google Fonts: Prompt & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f472b6',
+                            400: '#e879f9',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        },
+                        softRose: {
+                            50: '#fff5f6',
+                            100: '#ffe6e8',
+                            200: '#fecdd3',
+                            500: '#f43f5e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(251, 207, 232, 0.5);
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 30px -5px rgba(236, 72, 153, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+        }
+        .soft-shadow-lg {
+            box-shadow: 0 20px 40px -15px rgba(219, 39, 119, 0.12);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdf2f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fbcfe8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f472b6;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-700 bg-gradient-to-br from-pink-50 via-rose-50/30 to-purple-50/40 flex flex-col min-h-screen pb-20 md:pb-10">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 glass-card border-b border-pink-100/60 shadow-sm transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-500 to-rose-400 flex items-center justify-center text-white shadow-md shadow-brand-200 transform transition hover:scale-105">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-brand-600 to-rose-500 bg-clip-text text-transparent tracking-tight">HerDays</span>
+                        <span class="text-xs block text-brand-400 font-medium -mt-1">Cycle Care & Wellness</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Buttons -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn text-brand-600 bg-brand-50 px-4 py-2 rounded-xl text-sm font-medium transition duration-150 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        หน้าหลัก & คำนวณ
+                    </button>
+                    <button onclick="switchTab('tracker')" id="nav-tracker" class="nav-btn text-slate-600 hover:text-brand-600 hover:bg-brand-50/50 px-4 py-2 rounded-xl text-sm font-medium transition duration-150 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        บันทึกประจำวัน
+                    </button>
+                    <button onclick="switchTab('insights')" id="nav-insights" class="nav-btn text-slate-600 hover:text-brand-600 hover:bg-brand-50/50 px-4 py-2 rounded-xl text-sm font-medium transition duration-150 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        AI Insights
+                    </button>
+                    <button onclick="switchTab('calendar')" id="nav-calendar" class="nav-btn text-slate-600 hover:text-brand-600 hover:bg-brand-50/50 px-4 py-2 rounded-xl text-sm font-medium transition duration-150 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        ปฏิทิน & ประวัติ
+                    </button>
+                </nav>
+
+                <!-- Status Badge Header -->
+                <div class="hidden lg:flex items-center gap-2 bg-rose-100/60 text-brand-700 px-3 py-1.5 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    <span id="header-status-text">HerDays Ready</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- TAB 1: DASHBOARD & CALCULATOR -->
+        <div id="tab-dashboard" class="tab-content space-y-8">
+            
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-500 via-rose-400 to-pink-400 p-6 sm:p-10 text-white soft-shadow-lg">
+                <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <svg class="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium mb-3 text-white border border-white/30">
+                        🌸 ดูแลสุขภาพผู้หญิงแบบส่วนตัว 100% (Offline First)
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2 leading-tight">
+                        เข้าใจร่างกายของคุณ<br class="hidden sm:inline"> ในทุกๆ ช่วงเวลาของเดือน
+                    </h1>
+                    <p class="text-pink-100 text-sm sm:text-base mb-6 leading-relaxed font-light">
+                        คำนวณรอบเดือน วันตกไข่ และช่วงเจริญพันธุ์อย่างแม่นยำ พร้อมวิเคราะห์อาการด้วย Local AI เพื่อการดูแลตัวเองที่ดีที่สุด
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="scrollToCalculator()" class="bg-white text-brand-600 hover:bg-pink-50 font-semibold px-5 py-2.5 rounded-xl shadow-md transition duration-200 transform hover:-translate-y-0.5 text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            คำนวณรอบเดือน
+                        </button>
+                        <button onclick="switchTab('tracker')" class="bg-brand-600/40 hover:bg-brand-600/60 border border-white/30 text-white font-medium px-5 py-2.5 rounded-xl transition duration-200 text-sm flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            บันทึกอาการวันนี้
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Cycle Overview Card (If Configured) -->
+            <div id="cycle-summary-card" class="glass-card rounded-3xl p-6 soft-shadow">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-5 w-full md:w-auto">
+                        <div class="relative flex-shrink-0">
+                            <!-- Circular Progress Visual -->
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-brand-100 to-rose-100 border-4 border-brand-200 flex flex-col items-center justify-center text-center p-2 soft-shadow">
+                                <span class="text-xs text-slate-500 font-medium">วันรอบเดือน</span>
+                                <span id="summary-cycle-day" class="text-2xl font-bold text-brand-600">Day --</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 mb-1" id="summary-phase-badge">
+                                ไม่พบข้อมูล
+                            </div>
+                            <h2 id="summary-phase-title" class="text-xl font-bold text-slate-800">กรุณากรอกข้อมูลวันประจำเดือนล่าสุด</h2>
+                            <p id="summary-phase-desc" class="text-xs text-slate-500 mt-1 max-w-md">ระบบจะคำนวณระยะตกไข่ และช่วงที่มีโอกาสตั้งครรภ์ให้โดยอัตโนมัติ</p>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-auto flex flex-col sm:flex-row gap-3 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
+                        <div class="bg-rose-50/70 p-3.5 rounded-2xl border border-rose-100 text-center min-w-[130px]">
+                            <span class="text-xs text-slate-500 block">ประจำเดือนรอบถัดไป</span>
+                            <span id="summary-next-period" class="font-bold text-slate-800 text-sm mt-0.5 block">--</span>
+                            <span id="summary-next-countdown" class="text-[11px] font-medium text-brand-500 block">--</span>
+                        </div>
+                        <div class="bg-purple-50/70 p-3.5 rounded-2xl border border-purple-100 text-center min-w-[130px]">
+                            <span class="text-xs text-slate-500 block">คาดการณ์วันตกไข่</span>
+                            <span id="summary-ovulation-date" class="font-bold text-slate-800 text-sm mt-0.5 block">--</span>
+                            <span id="summary-fertile-window" class="text-[11px] font-medium text-purple-600 block">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATOR FORM & DETAILED RESULTS SECTION -->
+            <div id="calculator-section" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Calculator Input Form -->
+                <div class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-7 soft-shadow h-fit">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2.5 rounded-2xl bg-brand-100 text-brand-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">คำนวณรอบประจำเดือน</h3>
+                            <p class="text-xs text-slate-500">กรอกข้อมูลเพื่อประมวลผลระยะเวลา</p>
+                        </div>
+                    </div>
+
+                    <form id="calculator-form" onsubmit="event.preventDefault(); calculateCycle();" class="space-y-5">
+                        <!-- Input 1: Last Period Date -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1.5" for="lmp-date">
+                                วันแรกของประจำเดือนครั้งล่าสุด <span class="text-brand-500">*</span>
+                            </label>
+                            <input type="date" id="lmp-date" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-400 focus:border-brand-400 outline-none transition bg-white/70 text-sm text-slate-800 font-medium">
+                        </div>
+
+                        <!-- Input 2: Cycle Length -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-semibold text-slate-700" for="cycle-length">
+                                    ระยะเวลารอบเดือนปกติ (วัน)
+                                </label>
+                                <span id="cycle-length-val" class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">28 วัน</span>
+                            </div>
+                            <input type="range" id="cycle-length" min="20" max="45" value="28" oninput="document.getElementById('cycle-length-val').innerText = this.value + ' วัน'" class="w-full accent-brand-500 h-2 bg-pink-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>20 วัน</span>
+                                <span>28 วัน (ค่าปกติ)</span>
+                                <span>45 วัน</span>
+                            </div>
+                        </div>
+
+                        <!-- Input 3: Period Duration -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <label class="block text-xs font-semibold text-slate-700" for="period-duration">
+                                    จำนวนวันที่มีประจำเดือน (วัน)
+                                </label>
+                                <span id="period-duration-val" class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">5 วัน</span>
+                            </div>
+                            <input type="range" id="period-duration" min="2" max="10" value="5" oninput="document.getElementById('period-duration-val').innerText = this.value + ' วัน'" class="w-full accent-brand-500 h-2 bg-pink-100 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                                <span>2 วัน</span>
+                                <span>5 วัน</span>
+                                <span>10 วัน</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-brand-500 to-rose-500 hover:from-brand-600 hover:to-rose-600 text-white font-semibold rounded-2xl shadow-md shadow-brand-200 transition duration-200 flex items-center justify-center gap-2 text-sm mt-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            ประมวลผลรอบเดือน
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Calculated Output Display Cards -->
+                <div class="lg:col-span-7 space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <span>📊</span> ผลการคำนวณและคาดการณ์
+                    </h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Card 1: Next Period -->
+                        <div class="glass-card p-5 rounded-2xl border-l-4 border-l-brand-500 soft-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-semibold text-slate-500">วันแรกของรอบถัดไป</span>
+                                <span id="badge-next-period" class="text-[11px] bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-semibold">--</span>
+                            </div>
+                            <div id="calc-next-period" class="text-lg font-bold text-slate-800">กรุณาคำนวณข้อมูล</div>
+                            <p class="text-xs text-slate-500 mt-1">คาดการณ์ประจำเดือนรอบใหม่</p>
+                        </div>
+
+                        <!-- Card 2: Ovulation Date -->
+                        <div class="glass-card p-5 rounded-2xl border-l-4 border-l-purple-500 soft-shadow">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-semibold text-slate-500">วันตกไข่ (Ovulation)</span>
+                                <span id="badge-ovulation" class="text-[11px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">--</span>
+                            </div>
+                            <div id="calc-ovulation-date" class="text-lg font-bold text-slate-800">กรุณาคำนวณข้อมูล</div>
+                            <p class="text-xs text-slate-500 mt-1">ไข่ตกประมาณ 14 วันก่อนรอบถัดไป</p>
+                        </div>
+
+                        <!-- Card 3: Fertile Window -->
+                        <div class="glass-card p-5 rounded-2xl border-l-4 border-l-pink-400 soft-shadow sm:col-span-2">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-semibold text-slate-500">ช่วงที่มีโอกาสตั้งครรภ์สูง (Fertile Window)</span>
+                                <span class="text-[11px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full font-semibold">6 วันทอง</span>
+                            </div>
+                            <div id="calc-fertile-range" class="text-base sm:text-lg font-bold text-slate-800">กรุณาคำนวณข้อมูล</div>
+                            <p class="text-xs text-slate-500 mt-1">เหมาะสำหรับผู้ที่วางแผนมีบุตร หรือผู้ที่ต้องการคุมกำเนิดอย่างระมัดระวัง</p>
+                        </div>
+                    </div>
+
+                    <!-- Phase Description Card -->
+                    <div class="glass-card p-5 rounded-2xl soft-shadow bg-gradient-to-r from-white to-pink-50/50">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-brand-600 mb-2">ระยะปัจจุบันของร่างกาย</h4>
+                        <div id="current-phase-detail" class="space-y-1">
+                            <p class="text-sm text-slate-600">กรุณากดปุ่ม <b>"ประมวลผลรอบเดือน"</b> ด้านซ้ายเพื่อรับข้อมูลวิเคราะห์เชิงลึกประจำระยะของคุณ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: SYMPTOM & MOOD TRACKER -->
+        <div id="tab-tracker" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 soft-shadow">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 border-b border-pink-100 pb-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span>📝</span> บันทึกอาการและอารมณ์ประจำวัน
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-0.5">ติดตามสภาวะร่างกายเพื่อการดูแลสุขภาพอย่างมีประสิทธิภาพ</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1" for="track-date">เลือกวันที่บันทึก:</label>
+                        <input type="date" id="track-date" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 bg-white focus:ring-2 focus:ring-brand-400 outline-none">
+                    </div>
+                </div>
+
+                <form id="tracker-form" onsubmit="event.preventDefault(); saveDailyLog();" class="space-y-6">
+                    
+                    <!-- Flow Level -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                            🩸 ปริมาณประจำเดือน (Flow Level)
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="flow" value="none" class="peer hidden" checked>
+                                <div class="px-4 py-3 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    ไม่มี / สม่ำเสมอ
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="flow" value="light" class="peer hidden">
+                                <div class="px-4 py-3 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    น้อย / กะปริดกะปรอย
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="flow" value="medium" class="peer hidden">
+                                <div class="px-4 py-3 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    ปานกลาง
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="flow" value="heavy" class="peer hidden">
+                                <div class="px-4 py-3 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    มาก
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Symptoms Checklist -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                            🩺 อาการทางร่างกาย (Physical Symptoms)
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="symptoms-container">
+                            <!-- Checkboxes created dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Mood Checklist -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                            😊 สภาวะอารมณ์ (Mood & Emotions)
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="moods-container">
+                            <!-- Checkboxes created dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Sexual Activity / Protection -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+                            💕 กิจกรรมทางเพศ (Sexual Activity)
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sex" value="none" class="peer hidden" checked>
+                                <div class="px-4 py-2.5 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    ไม่มีกิจกรรม
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sex" value="protected" class="peer hidden">
+                                <div class="px-4 py-2.5 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    มีกิจกรรม (ป้องกัน) 🛡️
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="sex" value="unprotected" class="peer hidden">
+                                <div class="px-4 py-2.5 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-brand-50/80 peer-checked:text-brand-700 text-center text-xs font-medium transition hover:bg-slate-50">
+                                    มีกิจกรรม (ไม่ได้ป้องกัน) ⚠️
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5" for="log-notes">
+                            ✏️ บันทึกเพิ่มเติมประจำวัน
+                        </label>
+                        <textarea id="log-notes" rows="3" placeholder="ระบุรายละเอียดเพิ่มเติม เช่น ดื่มน้ำกี่ลิตร, ได้รับยาแก้ปวดหรือไม่..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-brand-400 outline-none text-xs text-slate-700 bg-white/80"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-brand-500 to-rose-500 hover:from-brand-600 hover:to-rose-600 text-white font-semibold rounded-2xl shadow-md shadow-brand-200 transition duration-200 text-sm flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            บันทึกข้อมูลลงในระบบ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 3: AI OFFLINE INSIGHTS ENGINE -->
+        <div id="tab-insights" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 soft-shadow">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 rounded-2xl bg-gradient-to-tr from-brand-500 to-purple-500 text-white shadow-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">HerDays AI Offline Insights</h2>
+                        <p class="text-xs text-slate-500">บทวิเคราะห์สุขภาพและคำแนะนำรายบุคคลด้วยระบบ Local Logic</p>
+                    </div>
+                </div>
+
+                <div id="ai-insights-container" class="space-y-4">
+                    <!-- AI recommendation cards rendered via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: CALENDAR & HISTORY LOG -->
+        <div id="tab-calendar" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Interactive Calendar View -->
+                <div class="lg:col-span-7 glass-card rounded-3xl p-6 soft-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <span>📅</span> ปฏิทินรอบเดือน
+                        </h3>
+                        <div class="flex items-center gap-2 text-xs font-semibold">
+                            <button onclick="changeMonth(-1)" class="p-1.5 rounded-lg hover:bg-pink-100 text-slate-600">&lt;</button>
+                            <span id="calendar-month-year" class="text-slate-800">-- ----</span>
+                            <button onclick="changeMonth(1)" class="p-1.5 rounded-lg hover:bg-pink-100 text-slate-600">&gt;</button>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Legend -->
+                    <div class="flex flex-wrap gap-3 text-[11px] mb-4 p-2.5 bg-slate-50/80 rounded-xl">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-brand-500 inline-block"></span> ประจำเดือน</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-purple-500 inline-block"></span> วันตกไข่</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-pink-200 border border-pink-400 inline-block"></span> ช่วงเจริญพันธุ์</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> มีบันทึก</span>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 mb-2">
+                        <div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div>
+                    </div>
+                    <div id="calendar-days-grid" class="grid grid-cols-7 gap-1">
+                        <!-- Days rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Saved Log History -->
+                <div class="lg:col-span-5 glass-card rounded-3xl p-6 soft-shadow flex flex-col h-full">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-slate-800">ประวัติการบันทึก</h3>
+                        <span id="history-count" class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full">0 บันทึก</span>
+                    </div>
+
+                    <div id="history-list" class="space-y-3 overflow-y-auto max-h-[420px] pr-1 flex-grow">
+                        <!-- History Items rendered via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-card border-t border-pink-100/80 z-50 px-2 py-1.5 shadow-lg">
+        <div class="grid grid-cols-4 text-center">
+            <button onclick="switchTab('dashboard')" id="mob-nav-dashboard" class="mob-nav-btn flex flex-col items-center justify-center py-1 text-brand-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[10px] mt-0.5 font-medium">หน้าหลัก</span>
+            </button>
+            <button onclick="switchTab('tracker')" id="mob-nav-tracker" class="mob-nav-btn flex flex-col items-center justify-center py-1 text-slate-400 hover:text-brand-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                <span class="text-[10px] mt-0.5 font-medium">บันทึก</span>
+            </button>
+            <button onclick="switchTab('insights')" id="mob-nav-insights" class="mob-nav-btn flex flex-col items-center justify-center py-1 text-slate-400 hover:text-brand-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span class="text-[10px] mt-0.5 font-medium">AI Insights</span>
+            </button>
+            <button onclick="switchTab('calendar')" id="mob-nav-calendar" class="mob-nav-btn flex flex-col items-center justify-center py-1 text-slate-400 hover:text-brand-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span class="text-[10px] mt-0.5 font-medium">ปฏิทิน</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        /* ==========================================================================
+           HerDays Web Application - Core Logic & Storage
+           ========================================================================== */
+
+        // Constant Definitions
+        const STORAGE_KEY_CONFIG = 'herdays_config_v1';
+        const STORAGE_KEY_LOGS = 'herdays_logs_v1';
+
+        const SYMPTOMS_LIST = [
+            { id: 'cramps', label: 'ปวดท้องประจำเดือน', icon: '⚡' },
+            { id: 'acne', label: 'สิวขึ้น / ผิวสัมผัสเปลี่ยน', icon: '✨' },
+            { id: 'headache', label: 'ปวดศีรษะ / เวียนหัว', icon: '🤕' },
+            { id: 'insomnia', label: 'นอนไม่หลับ / หลับไม่สนิท', icon: '🌙' },
+            { id: 'bloating', label: 'ท้องอืด / แน่นท้อง', icon: '🎈' },
+            { id: 'fatigue', label: 'เหนื่อยล้า / อ่อนเพลีย', icon: '🔋' }
+        ];
+
+        const MOODS_LIST = [
+            { id: 'happy', label: 'อารมณ์ดี / สดชื่น', icon: '😊' },
+            { id: 'irritable', label: 'หงุดหงิดง่าย', icon: '😤' },
+            { id: 'anxious', label: 'วิตกกังวล / เครียด', icon: '😰' },
+            { id: 'moodswings', label: 'อารมณ์แปรปรวน', icon: '🎭' },
+            { id: 'sad', label: 'เศร้า / ดิ่ง', icon: '🥺' }
+        ];
+
+        const THAI_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+        // State Variables
+        let currentCalendarDate = new Date();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initFormOptions();
+            setDefaultDates();
+            loadAndApplyConfig();
+            renderHistoryList();
+            renderCalendar();
+            generateAIInsights();
+        });
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Desktop Buttons Styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600', 'bg-brand-50');
+                btn.classList.add('text-slate-600');
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('text-brand-600', 'bg-brand-50');
+                activeNav.classList.remove('text-slate-600');
+            }
+
+            // Mobile Buttons Styling
+            document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-600');
+                btn.classList.add('text-slate-400');
+            });
+            const activeMobNav = document.getElementById(`mob-nav-${tabId}`);
+            if (activeMobNav) {
+                activeMobNav.classList.add('text-brand-600');
+                activeMobNav.classList.remove('text-slate-400');
+            }
+
+            if (tabId === 'insights') {
+                generateAIInsights();
+            } else if (tabId === 'calendar') {
+                renderCalendar();
+            }
+        }
+
+        function scrollToCalculator() {
+            switchTab('dashboard');
+            document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize Options for Symptom & Mood Checkboxes
+        function initFormOptions() {
+            const symptomsContainer = document.getElementById('symptoms-container');
+            symptomsContainer.innerHTML = SYMPTOMS_LIST.map(item => `
+                <label class="cursor-pointer">
+                    <input type="checkbox" name="symptoms" value="${item.id}" class="peer hidden">
+                    <div class="px-3 py-2.5 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-pink-50/80 peer-checked:text-brand-700 text-xs font-medium transition flex items-center gap-2 hover:bg-slate-50">
+                        <span>${item.icon}</span>
+                        <span>${item.label}</span>
+                    </div>
+                </label>
+            `).join('');
+
+            const moodsContainer = document.getElementById('moods-container');
+            moodsContainer.innerHTML = MOODS_LIST.map(item => `
+                <label class="cursor-pointer">
+                    <input type="checkbox" name="moods" value="${item.id}" class="peer hidden">
+                    <div class="px-3 py-2.5 rounded-2xl border border-slate-200 peer-checked:border-brand-500 peer-checked:bg-pink-50/80 peer-checked:text-brand-700 text-xs font-medium transition flex items-center gap-2 hover:bg-slate-50">
+                        <span>${item.icon}</span>
+                        <span>${item.label}</span>
+                    </div>
+                </label>
+            `).join('');
+        }
+
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('track-date').value = today;
+            
+            // Set default LMP date to 14 days ago if empty
+            const lmpInput = document.getElementById('lmp-date');
+            if (!lmpInput.value) {
+                const defaultLmp = new Date();
+                defaultLmp.setDate(defaultLmp.getDate() - 14);
+                lmpInput.value = defaultLmp.toISOString().split('T')[0];
+            }
+        }
+
+        function calculateCycle() {
+            const lmpVal = document.getElementById('lmp-date').value;
+            const cycleLength = parseInt(document.getElementById('cycle-length').value);
+            const periodDuration = parseInt(document.getElementById('period-duration').value);
+
+            if (!lmpVal) {
+                showToast('กรุณาระบุวันแรกของประจำเดือนครั้งล่าสุด', 'error');
+                return;
+            }
+
+            const config = { lmpDate: lmpVal, cycleLength, periodDuration };
+            localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(config));
+
+            updateCycleUI(config);
+            showToast('บันทึกและคำนวณรอบเดือนเรียบร้อยแล้ว');
+            generateAIInsights();
+        }
+
+        function loadAndApplyConfig() {
+            const raw = localStorage.getItem(STORAGE_KEY_CONFIG);
+            if (raw) {
+                try {
+                    const config = JSON.parse(raw);
+                    document.getElementById('lmp-date').value = config.lmpDate;
+                    document.getElementById('cycle-length').value = config.cycleLength;
+                    document.getElementById('cycle-length-val').innerText = config.cycleLength + ' วัน';
+                    document.getElementById('period-duration').value = config.periodDuration;
+                    document.getElementById('period-duration-val').innerText = config.periodDuration + ' วัน';
+                    updateCycleUI(config);
+                } catch (e) {
+                    console.error('Failed to parse config:', e);
+                }
+            }
+        }
+
+        function updateCycleUI(config) {
+            const lmp = new Date(config.lmpDate);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            // Calculations
+            const nextPeriod = new Date(lmp);
+            nextPeriod.setDate(nextPeriod.getDate() + config.cycleLength);
+
+            const ovulation = new Date(nextPeriod);
+            ovulation.setDate(ovulation.getDate() - 14);
+
+            const fertileStart = new Date(ovulation);
+            fertileStart.setDate(fertileStart.getDate() - 5);
+
+            const fertileEnd = new Date(ovulation);
+            fertileEnd.setDate(fertileEnd.getDate() + 1);
+
+            // Calculate current cycle day
+            const diffTime = Math.abs(today - lmp);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            const currentCycleDay = ((diffDays - 1) % config.cycleLength) + 1;
+
+            // Countdown to next period
+            const daysUntilNext = Math.ceil((nextPeriod - today) / (1000 * 60 * 60 * 24));
+
+            // Determine Phase
+            let phaseInfo = getPhaseDetails(currentCycleDay, config.periodDuration, config.cycleLength);
+
+            // Update Summary Card Top Banner
+            document.getElementById('summary-cycle-day').innerText = `Day ${currentCycleDay}`;
+            document.getElementById('summary-phase-badge').innerText = phaseInfo.name;
+            document.getElementById('summary-phase-title').innerText = phaseInfo.title;
+            document.getElementById('summary-phase-desc').innerText = phaseInfo.shortDesc;
+            document.getElementById('summary-next-period').innerText = formatDateThai(nextPeriod);
+            document.getElementById('summary-next-countdown').innerText = daysUntilNext >= 0 ? `อีก ${daysUntilNext} วัน` : 'เลยกำหนดคาดการณ์';
+            document.getElementById('summary-ovulation-date').innerText = formatDateThai(ovulation);
+            document.getElementById('summary-fertile-window').innerText = `${formatDateThaiShort(fertileStart)} - ${formatDateThaiShort(fertileEnd)}`;
+
+            // Update Detailed Calculator Cards
+            document.getElementById('calc-next-period').innerText = formatDateThai(nextPeriod);
+            document.getElementById('badge-next-period').innerText = daysUntilNext >= 0 ? `อีก ${daysUntilNext} วัน` : 'เลยกำหนด';
+            
+            document.getElementById('calc-ovulation-date').innerText = formatDateThai(ovulation);
+            const diffOvulation = Math.ceil((ovulation - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('badge-ovulation').innerText = diffOvulation === 0 ? 'วันนี้!' : (diffOvulation > 0 ? `อีก ${diffOvulation} วัน` : 'ผ่านมาแล้ว');
+
+            document.getElementById('calc-fertile-range').innerText = `${formatDateThai(fertileStart)} ถึง ${formatDateThai(fertileEnd)}`;
+
+            document.getElementById('current-phase-detail').innerHTML = `
+                <div class="flex items-center gap-2 text-sm font-semibold text-brand-700">
+                    <span>${phaseInfo.icon}</span> ${phaseInfo.name} (วันที่ ${currentCycleDay} ของรอบเดือน)
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed mt-1">${phaseInfo.fullDesc}</p>
+            `;
+
+            document.getElementById('header-status-text').innerText = `รอบเดือนวัน第 ${currentCycleDay} (${phaseInfo.name})`;
+        }
+
+        function getPhaseDetails(day, periodDuration, cycleLength) {
+            const ovulationDay = cycleLength - 14;
+
+            if (day <= periodDuration) {
+                return {
+                    name: 'Menstrual Phase (ระยะประจำเดือน)',
+                    icon: '🩸',
+                    title: 'อยู่ในช่วงมีประจำเดือน',
+                    shortDesc: 'ระดับฮอร์โมนเอสโตรเจนและโปรเจสเตอโรนต่ำ ร่างกายต้องการการพักผ่อน',
+                    fullDesc: 'เยื่อบุโพรงมดลูกกำลังลอกตัว เป็นช่วงที่คุณอาจรู้สึกอ่อนเพลียหรือมีอาการปวดท้อง ควรดื่มน้ำอุ่น พักผ่อนให้เพียงพอ และทานอาหารที่มีธาตุเหล็กสูง'
+                };
+            } else if (day < ovulationDay - 2) {
+                return {
+                    name: 'Follicular Phase (ระยะไข่สุก)',
+                    icon: '🌱',
+                    title: 'กำลังเข้าสู่ช่วงไข่สุก',
+                    shortDesc: 'ระดับฮอร์โมนเอสโตรเจนกำลังเพิ่มสูงขึ้น รู้สึกมีพลังงานและความสดชื่น',
+                    fullDesc: 'ร่างกายกำลังเตรียมพร้อมปล่อยไข่ ระดับพลังงาน อารมณ์ และความสดชื่นจะเพิ่มสูงขึ้น เหมาะกับการออกกำลังกายและการทำกิจกรรมสร้างสรรค์'
+                };
+            } else if (day >= ovulationDay - 2 && day <= ovulationDay + 1) {
+                return {
+                    name: 'Ovulation Phase (ระยะตกไข่)',
+                    icon: '✨',
+                    title: 'อยู่ในช่วงเจริญพันธุ์สูงสุด',
+                    shortDesc: 'ไข่ถูกปล่อยจากรังไข่ มีโอกาสตั้งครรภ์สูงที่สุดในช่วงนี้',
+                    fullDesc: 'ช่วงตกไข่ ฮอร์โมน LH จะพุ่งสูงขึ้น อาจมีมูกตกขาวลักษณะใสและยืดหยุ่น รู้สึกมั่นใจและมีอารมณ์ทางเพศเพิ่มขึ้น'
+                };
+            } else {
+                return {
+                    name: 'Luteal Phase (ระยะก่อนมีประจำเดือน)',
+                    icon: '🌙',
+                    title: 'ระยะก่อนมีประจำเดือน (PMS Window)',
+                    shortDesc: 'โปรเจสเตอโรนสูงขึ้น อาจเริ่มมีอาการก่อนมีประจำเดือน (PMS)',
+                    fullDesc: 'ระดับฮอร์โมนโปรเจสเตอโรนเพิ่มขึ้นก่อนจะลดลงอย่างรวดเร็วหากไม่มีการปฏิสนธิ อาจเกิดอาการสิวขึ้น ท้องอืด อารมณ์แปรปรวน หรือหิวง่าย'
+                };
+            }
+        }
+
+        function saveDailyLog() {
+            const dateVal = document.getElementById('track-date').value;
+            if (!dateVal) {
+                showToast('กรุณาเลือกวันที่บันทึก', 'error');
+                return;
+            }
+
+            const flow = document.querySelector('input[name="flow"]:checked').value;
+            const symptoms = Array.from(document.querySelectorAll('input[name="symptoms"]:checked')).map(el => el.value);
+            const moods = Array.from(document.querySelectorAll('input[name="moods"]:checked')).map(el => el.value);
+            const sex = document.querySelector('input[name="sex"]:checked').value;
+            const notes = document.getElementById('log-notes').value.trim();
+
+            const logEntry = {
+                date: dateVal,
+                flow,
+                symptoms,
+                moods,
+                sex,
+                notes,
+                updatedAt: new Date().toISOString()
+            };
+
+            let logs = getStoredLogs();
+            // Replace entry if exists for the same date
+            logs = logs.filter(l => l.date !== dateVal);
+            logs.push(logEntry);
+            localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+
+            showToast('บันทึกข้อมูลประจำวันเรียบร้อยแล้ว!');
+            renderHistoryList();
+            renderCalendar();
+            generateAIInsights();
+        }
+
+        function getStoredLogs() {
+            const raw = localStorage.getItem(STORAGE_KEY_LOGS);
+            return raw ? JSON.parse(raw) : [];
+        }
+
+        function deleteLog(date) {
+            let logs = getStoredLogs();
+            logs = logs.filter(l => l.date !== date);
+            localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+            showToast('ลบบันทึกเรียบร้อยแล้ว');
+            renderHistoryList();
+            renderCalendar();
+            generateAIInsights();
+        }
+
+        function generateAIInsights() {
+            const container = document.getElementById('ai-insights-container');
+            const logs = getStoredLogs();
+            const configRaw = localStorage.getItem(STORAGE_KEY_CONFIG);
+
+            let insights = [];
+
+            // Rule 1: Analyze recent logged symptoms (Last 7 days)
+            const recentLogs = logs.slice(-7);
+            const hasCramps = recentLogs.some(l => l.symptoms.includes('cramps'));
+            const hasAcne = recentLogs.some(l => l.symptoms.includes('acne'));
+            const hasInsomnia = recentLogs.some(l => l.symptoms.includes('insomnia'));
+            const hasMoodSwings = recentLogs.some(l => l.moods.includes('moodswings') || l.moods.includes('irritable'));
+
+            if (hasCramps) {
+                insights.push({
+                    type: 'warning',
+                    title: '🍵 รับมืออาการปวดท้องประจำเดือน',
+                    tag: 'โภชนาการ & บรรเทาปวด',
+                    content: 'พบประวัติอาการปวดท้อง แนะนำให้ประคบร้อนบริเวณท้องน้อยเป็นเวลา 15-20 นาที รับประทานอาหารที่อุดมด้วย **แมกนีเซียม** เช่น กล้วย หม่อง หรือถั่ว และจิบชาน้ำอุ่น/ชาคาโมมายล์เพื่อช่วยผ่อนคลายกล้ามเนื้อมดลูก'
+                });
+            }
+
+            if (hasAcne) {
+                insights.push({
+                    type: 'info',
+                    title: '✨ ดูแลผิวพรรณช่วงฮอร์โมนเปลี่ยนแปลง',
+                    tag: 'สกินแคร์ & ฮอร์โมน',
+                    content: 'ระดับฮอร์โมนกระตุ้นการผลิตน้ำมันใต้ผิว ล้างหน้าด้วยโฟมสูตรอ่อนโยน หลีกเลี่ยงการบีบสิว เพิ่มการดื่มน้ำสะอาดอย่างน้อย 2-2.5 ลิตร/วัน และงดอาหารของทอด/ของหวานชั่วคราว'
+                });
+            }
+
+            if (hasInsomnia || hasMoodSwings) {
+                insights.push({
+                    type: 'purple',
+                    title: '🧘‍♀️ การปรับสภาวะอารมณ์และการนอนหลับ',
+                    tag: 'สุขภาพจิต & การนอน',
+                    content: 'ระดับโปรเจสเตอโรนอาจส่งผลต่อสารสื่อประสาท ทำให้เกิดความเครียดหรือนอนยาก ลองทำสมาธิ ฝึกหายใจลึกๆ 5 นาที ก่อนนอน งดหน้าจอสมาร์ทโฟน 30 นาทีก่อนนอน'
+                });
+            }
+
+            // Rule 2: Phase-based AI Insights
+            if (configRaw) {
+                const config = JSON.parse(configRaw);
+                const lmp = new Date(config.lmpDate);
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const diffDays = Math.floor(Math.abs(today - lmp) / (1000 * 60 * 60 * 24)) + 1;
+                const currentCycleDay = ((diffDays - 1) % config.cycleLength) + 1;
+                const ovulationDay = config.cycleLength - 14;
+
+                if (currentCycleDay >= ovulationDay - 2 && currentCycleDay <= ovulationDay + 1) {
+                    insights.push({
+                        type: 'pink',
+                        title: '🌸 เคล็ดลับดูแลตัวเองช่วงวันตกไข่ (Fertile Window)',
+                        tag: 'ช่วงเจริญพันธุ์',
+                        content: 'ช่วงนี้ร่างกายจะมีอุณหภูมิพื้นฐาน (BBT) สูงขึ้นเล็กน้อย หากต้องการวางแผนตั้งครรภ์ ช่วงนี้เป็นช่วงที่มีโอกาสสำเร็จสูงสุด รับประทานโฟเลต (Folic Acid) และผักใบเขียวสด'
+                    });
+                } else if (currentCycleDay > ovulationDay + 1) {
+                    insights.push({
+                        type: 'info',
+                        title: '🥗 คำแนะนำโภชนาการช่วง Luteal Phase (ก่อนมีประจำเดือน)',
+                        tag: 'โภชนาการตามรอบ',
+                        content: 'ร่างกายอาจเผาผลาญพลังงานมากขึ้น ทำให้หิวง่าย ควรเน้นโปรตีนไขมันต่ำ คาร์โบไฮเดรตเชิงซ้อน (เช่น ข้าวกล้อง, โฮลวีต) เพื่อรักษาระดับน้ำตาลในเลือดให้คงที่'
+                    });
+                }
+            }
+
+            // Default General Insight if no specific triggers
+            if (insights.length === 0) {
+                insights.push({
+                    type: 'info',
+                    title: '🌿 เคล็ดลับสุขภาพสมดุลประจำวัน',
+                    tag: 'สุขภาพทั่วไป',
+                    content: 'หมั่นบันทึกอาการและสภาวะอารมณ์ของคุณอย่างสม่ำเสมอ HerDays AI จะนำข้อมูลมาวิเคราะห์หารูปแบบ (Pattern) ร่างกาย เพื่อให้คำแนะนำที่แม่นยำยิ่งขึ้นในทุกๆ รอบเดือน'
+                });
+            }
+
+            // Render Insights Cards
+            container.innerHTML = insights.map(item => {
+                let badgeStyle = 'bg-pink-100 text-pink-700';
+                let borderStyle = 'border-l-brand-500';
+                if (item.type === 'purple') {
+                    badgeStyle = 'bg-purple-100 text-purple-700';
+                    borderStyle = 'border-l-purple-500';
+                } else if (item.type === 'warning') {
+                    badgeStyle = 'bg-rose-100 text-rose-700';
+                    borderStyle = 'border-l-rose-500';
+                }
+
+                return `
+                    <div class="glass-card p-5 rounded-2xl border-l-4 ${borderStyle} soft-shadow transition hover:scale-[1.01]">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold ${badgeStyle} px-2.5 py-0.5 rounded-full">${item.tag}</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Local AI Processed</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-800 mb-1.5">${item.title}</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">${item.content}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderHistoryList() {
+            const listContainer = document.getElementById('history-list');
+            const countContainer = document.getElementById('history-count');
+            const logs = getStoredLogs().sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            countContainer.innerText = `${logs.length} บันทึก`;
+
+            if (logs.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10 text-slate-400">
+                        <svg class="w-10 h-10 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <p class="text-xs">ยังไม่มีประวัติการบันทึกข้อมูล</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = logs.map(log => {
+                const symptomsText = log.symptoms.map(s => {
+                    const item = SYMPTOMS_LIST.find(i => i.id === s);
+                    return item ? item.icon + ' ' + item.label : s;
+                }).join(', ');
+
+                const moodsText = log.moods.map(m => {
+                    const item = MOODS_LIST.find(i => i.id === m);
+                    return item ? item.icon + ' ' + item.label : m;
+                }).join(', ');
+
+                return `
+                    <div class="bg-white/80 p-4 rounded-2xl border border-pink-100 soft-shadow text-xs relative group">
+                        <div class="flex justify-between items-start mb-1.5">
+                            <span class="font-bold text-slate-800">${formatDateThai(new Date(log.date))}</span>
+                            <button onclick="deleteLog('${log.date}')" class="text-slate-400 hover:text-rose-500 transition" title="ลบบันทึก">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                        
+                        ${log.flow !== 'none' ? `<div class="mb-1 text-brand-600 font-medium">🩸 ปริมาณ: ${getFlowLabel(log.flow)}</div>` : ''}
+                        ${symptomsText ? `<div class="text-slate-600 mb-1">🩺 อาการ: ${symptomsText}</div>` : ''}
+                        ${moodsText ? `<div class="text-slate-600 mb-1">😊 อารมณ์: ${moodsText}</div>` : ''}
+                        ${log.notes ? `<div class="text-slate-500 italic mt-1 bg-slate-50 p-2 rounded-xl">"${log.notes}"</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getFlowLabel(flow) {
+            switch(flow) {
+                case 'light': return 'น้อย / กะปริดกะปรอย';
+                case 'medium': return 'ปานกลาง';
+                case 'heavy': return 'มาก';
+                default: return 'ปกติ';
+            }
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-days-grid');
+            const monthYearLabel = document.getElementById('calendar-month-year');
+            const logs = getStoredLogs();
+
+            const configRaw = localStorage.getItem(STORAGE_KEY_CONFIG);
+            let config = configRaw ? JSON.parse(configRaw) : null;
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            monthYearLabel.innerText = `${THAI_MONTHS[month]} ${year + 543}`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let cellsHtml = '';
+
+            // Blank spaces for days before the 1st
+            for (let i = 0; i < firstDay; i++) {
+                cellsHtml += `<div class="h-10 sm:h-12"></div>`;
+            }
+
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const cellDate = new Date(year, month, day);
+                cellDate.setHours(0,0,0,0);
+
+                const hasLog = logs.some(l => l.date === dateStr);
+
+                let isPeriod = false;
+                let isOvulation = false;
+                let isFertile = false;
+
+                if (config) {
+                    const lmp = new Date(config.lmpDate);
+                    lmp.setHours(0,0,0,0);
+                    
+                    // Predict multiple cycle iterations for calendar
+                    for (let cycleOffset = -3; cycleOffset <= 6; cycleOffset++) {
+                        const cycleStart = new Date(lmp);
+                        cycleStart.setDate(cycleStart.getDate() + (cycleOffset * config.cycleLength));
+
+                        const cycleEnd = new Date(cycleStart);
+                        cycleEnd.setDate(cycleEnd.getDate() + config.periodDuration - 1);
+
+                        const ovulationDate = new Date(cycleStart);
+                        ovulationDate.setDate(ovulationDate.getDate() + (config.cycleLength - 14));
+
+                        const fertileStart = new Date(ovulationDate);
+                        fertileStart.setDate(fertileStart.getDate() - 5);
+
+                        const fertileEnd = new Date(ovulationDate);
+                        fertileEnd.setDate(fertileEnd.getDate() + 1);
+
+                        if (cellDate >= cycleStart && cellDate <= cycleEnd) {
+                            isPeriod = true;
+                        }
+                        if (cellDate.getTime() === ovulationDate.getTime()) {
+                            isOvulation = true;
+                        }
+                        if (cellDate >= fertileStart && cellDate <= fertileEnd) {
+                            isFertile = true;
+                        }
+                    }
+                }
+
+                // Style logic
+                let bgClass = 'bg-white hover:bg-pink-50/50';
+                let textClass = 'text-slate-700';
+
+                if (isPeriod) {
+                    bgClass = 'bg-brand-500 text-white font-bold shadow-sm';
+                    textClass = 'text-white';
+                } else if (isOvulation) {
+                    bgClass = 'bg-purple-500 text-white font-bold shadow-sm';
+                    textClass = 'text-white';
+                } else if (isFertile) {
+                    bgClass = 'bg-pink-100 text-pink-800 border border-pink-300 font-semibold';
+                }
+
+                cellsHtml += `
+                    <div class="h-10 sm:h-12 rounded-2xl flex flex-col items-center justify-center relative cursor-pointer ${bgClass} ${textClass} transition text-xs" onclick="quickSelectDate('${dateStr}')">
+                        <span>${day}</span>
+                        ${hasLog ? `<span class="w-1.5 h-1.5 rounded-full ${isPeriod || isOvulation ? 'bg-white' : 'bg-emerald-500'} absolute bottom-1"></span>` : ''}
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = cellsHtml;
+        }
+
+        function quickSelectDate(dateStr) {
+            document.getElementById('track-date').value = dateStr;
+            switchTab('tracker');
+            showToast(`เลือกวันที่ ${formatDateThai(new Date(dateStr))} สำหรับบันทึก`);
+        }
+
+        function formatDateThai(date) {
+            if (!(date instanceof Date) || isNaN(date)) return '--';
+            const day = date.getDate();
+            const month = THAI_MONTHS[date.getMonth()];
+            const year = date.getFullYear() + 543;
+            return `${day} ${month} ${year}`;
+        }
+
+        function formatDateThaiShort(date) {
+            if (!(date instanceof Date) || isNaN(date)) return '--';
+            const day = date.getDate();
+            const month = THAI_MONTHS[date.getMonth()];
+            return `${day} ${month}`;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'error' ? 'bg-rose-600' : 'bg-slate-800';
+
+            toast.className = `${bgColor} text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-medium flex items-center gap-2 transform transition-all duration-300 translate-y-[-10px] opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <span>${type === 'error' ? '⚠️' : '✅'}</span>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+            }, 10);
+
+            // Animate Out
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
