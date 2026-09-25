@@ -48,4 +48,4 @@ async function sendWeeklyReport(additionalData = "") {
 // เรียกใช้งานเพื่อทดสอบส่งข้อความทันที
 // ==========================================
 // บรรทัดใหม่:
-sendPeriodAlert();
+sendReminder();
