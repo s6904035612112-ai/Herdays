@@ -804,6 +804,13 @@
             localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
 
             showToast('บันทึกข้อมูลประจำวันเรียบร้อยแล้ว!');
+            // ส่งแจ้งเตือนประวัติการบันทึกเข้า Telegram
+        sendTelegramNotification(
+          dateVal,
+          symptoms.length > 0 ? symptoms.join(', ') : 'ไม่มี',
+          moods.length > 0 ? moods.join(', ') : 'ปกติ',
+          flow || 'ไม่ระบุ'
+        );
             renderHistoryList();
             renderCalendar();
             generateAIInsights();
@@ -1126,6 +1133,33 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+
+        // ฟังก์ชันส่งข้อความบันทึกประวัติเข้า Telegram
+  function sendTelegramNotification(dateStr, symptomsText, moodText, flowText) {
+    const TELEGRAM_BOT_TOKEN = '8560693899:AAHap_QPiJl4JAcdyqoo0Rdb4Re-xKG1dfM';
+    const CHAT_ID = '8899142410';
+
+    const message = `📝 <b>บันทึกสุขภาพ HerDays ใหม่!</b>\n` +
+                    `📅 <b>วันที่:</b> ${dateStr}\n` +
+                    `🩸 <b>ปริมาณ:</b> ${flowText || 'ไม่ระบุ'}\n` +
+                    `🩺 <b>อาการ:</b> ${symptomsText || 'ไม่มีอาการเพิ่มเติม'}\n` +
+                    `😊 <b>อารมณ์:</b> ${moodText || 'ปกติ'}\n` +
+                    `-------------------------\n` +
+                    `✨ <i>บันทึกผ่านระบบ HerDays Web</i>`;
+
+    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log('✅ Telegram Notification Sent:', data))
+    .catch(err => console.error('❌ Telegram Notification Error:', err));
+  }
     </script>
 </body>
 </html>
